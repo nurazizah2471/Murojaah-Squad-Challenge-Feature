@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F82" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="GameSessionEntity" representedClassName="GameSessionEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="created_at" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="is_give_up" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="surah_tag" optional="YES" attributeType="String"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="verse_tag" optional="YES" attributeType="String"/>
+        <relationship name="reader" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="gameSessions" inverseEntity="UserEntity"/>
+        <relationship name="reprimandLogs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReprimandLogEntity" inverseName="gameSession" inverseEntity="ReprimandLogEntity"/>
+        <relationship name="roomPlay" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RoomPlayEntity" inverseName="gameSessions" inverseEntity="RoomPlayEntity"/>
+    </entity>
+    <entity name="ReprimandLogEntity" representedClassName="ReprimandLogEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="is_tajweed_fault" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="is_verse_fault" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="gameSession" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GameSessionEntity" inverseName="reprimandLogs" inverseEntity="GameSessionEntity"/>
+        <relationship name="sourceUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="reprimandLogs" inverseEntity="UserEntity"/>
+    </entity>
+    <entity name="RoomPlayEntity" representedClassName="RoomPlayEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="created_at" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="is_finished" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="limit_verses" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="surah_last_range" optional="YES" attributeType="String"/>
+        <attribute name="surah_start_range" optional="YES" attributeType="String"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="verse_last_range" optional="YES" attributeType="String"/>
+        <attribute name="verse_start_range" optional="YES" attributeType="String"/>
+        <relationship name="gameSessions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GameSessionEntity" inverseName="roomPlay" inverseEntity="GameSessionEntity"/>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="roomPlays" inverseEntity="UserEntity"/>
+        <relationship name="userScoreLogs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserScoreLogEntity" inverseName="roomPlay" inverseEntity="UserScoreLogEntity"/>
+    </entity>
+    <entity name="UserEntity" representedClassName="UserEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="login_id" optional="YES" attributeType="String"/>
+        <attribute name="username" optional="YES" attributeType="String"/>
+        <relationship name="gameSessions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GameSessionEntity" inverseName="reader" inverseEntity="GameSessionEntity"/>
+        <relationship name="reprimandLogs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReprimandLogEntity" inverseName="sourceUser" inverseEntity="ReprimandLogEntity"/>
+        <relationship name="roomPlays" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="RoomPlayEntity" inverseName="users" inverseEntity="RoomPlayEntity"/>
+        <relationship name="userScoreLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserScoreLogEntity" inverseName="user" inverseEntity="UserScoreLogEntity"/>
+    </entity>
+    <entity name="UserScoreLogEntity" representedClassName="UserScoreLogEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="created_at" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="sumRight" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="roomPlay" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RoomPlayEntity" inverseName="userScoreLogs" inverseEntity="RoomPlayEntity"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="userScoreLog" inverseEntity="UserEntity"/>
+    </entity>
+</model>
